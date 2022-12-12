@@ -87,18 +87,20 @@ class D : public A, public B, public C
 		 //Implement this function
 		 void update_val(int new_val)
 		 {
-             int n = new_val;
-             while (n != 1) {
-                n = n / 2;
-                A::func(val);
-                n = n / 3;
-                B::func(val);
-                n = new_val / 5;
-                C::func(val);  
+             while (new_val != 1) {
+                 if (new_val % 5 == 0) {
+                     C::func(val);
+                     new_val /= 5;
+                 }
+                 if (new_val % 3 == 0) {
+                     B::func(val);
+                     new_val /= 3;
+                 }
+                 if (new_val % 2 == 0) {
+                     A::func(val);
+                     new_val /= 2;
+                 }
              }
-             
-
-			
 		 }
 		 //For Checking Purpose
 		 void check(int); //Do not delete this line.
