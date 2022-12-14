@@ -64,6 +64,47 @@ void counterspell(Spell *spell) {
 
   /* Enter your code here */
 
+  if (Fireball* fire = dynamic_cast<Fireball*>(spell)) {
+      fire->revealFirepower();
+  }
+  else if (Frostbite* frost = dynamic_cast<Frostbite*>(spell)) {
+      frost->revealFrostpower();
+  }
+  else if (Thunderstorm* thunder = dynamic_cast<Thunderstorm*>(spell)) {
+      thunder->revealThunderpower();
+  }
+  else if (Waterbolt* water = dynamic_cast<Waterbolt*>(spell)) {
+      water->revealWaterpower();
+  }
+  else {
+    string spl = spell->revealScrollName(), jnl = SpellJournal::read();
+    int s = spl.length(), l = jnl.length();
+    
+    // string B[l + 1];
+    string MEMO[s + 1][l + 1];
+
+    for (int i = 0; i < s; i++) {
+        for (int j = 0; j < l; j++) {
+            MEMO[i][j] = "";
+        }
+    }
+
+    for (int i = 1; i <= s; i++) {
+        for (int j = 1; j <= l; j++) {
+            if (spl[i - 1] == jnl[j - 1]) {
+                MEMO[i][j] = MEMO[i - 1][j - 1] + spl[i - 1];
+            }
+            else {
+                MEMO[i][j] = std::max(MEMO[i - 1][j], MEMO[i][j - 1]);
+            }
+        }
+    }
+
+    cout << MEMO[s][l].length() << endl;
+    
+}
+  
+
 }
 
 class Wizard {
