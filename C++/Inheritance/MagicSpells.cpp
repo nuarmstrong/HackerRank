@@ -62,6 +62,8 @@ string SpellJournal::journal = "";
 
 void counterspell(Spell *spell) {
 
+    // cout << spell->revealScrollName().size() << endl;
+
   /* Enter your code here */
 
   if (Fireball* fire = dynamic_cast<Fireball*>(spell)) {
@@ -77,32 +79,25 @@ void counterspell(Spell *spell) {
       water->revealWaterpower();
   }
   else {
-    string spl = spell->revealScrollName(), jnl = SpellJournal::read();
-    int s = spl.length(), l = jnl.length();
-    
-    // string B[l + 1];
-    string MEMO[s + 1][l + 1];
+    string spel = spell->revealScrollName(), counter = SpellJournal::read();
+    int s = spel.length(), l = counter.length();
 
-    for (int i = 0; i < s; i++) {
-        for (int j = 0; j < l; j++) {
-            MEMO[i][j] = "";
-        }
-    }
+    vector< vector< int > > v;
+    v.assign(s+1, vector< int >(l+1, 0));
 
     for (int i = 1; i <= s; i++) {
         for (int j = 1; j <= l; j++) {
-            if (spl[i - 1] == jnl[j - 1]) {
-                MEMO[i][j] = MEMO[i - 1][j - 1] + spl[i - 1];
+            if (spel[i - 1] == counter[j - 1]) {
+                v[i][j] = min(v[i-1][j], v[i][j-1]) + 1;
             }
             else {
-                MEMO[i][j] = std::max(MEMO[i - 1][j], MEMO[i][j - 1]);
+                v[i][j] = max(v[i-1][j], v[i][j-1]);
             }
         }
     }
-
-    cout << MEMO[s][l].length() << endl;
+    cout << v[s][l] << endl;
     
-}
+  }
   
 
 }
@@ -136,9 +131,11 @@ class Wizard {
 int main() {
     int T;
     cin >> T;
+    // cout << 1 << endl;
     Wizard Arawn;
     while(T--) {
         Spell *spell = Arawn.cast();
+        // cout << 2 << endl;
         counterspell(spell);
     }
     return 0;
